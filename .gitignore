@@ -1,3 +1,6 @@
-./node_modules
+node_modules/
 package-lock.json
 package.json
+MiniSprint2/.idea
+MiniSprint2/venv
+MiniSprint2/All CSL Properties with Global Ids and GDS Ids (Active)_Jun25_1.csv
