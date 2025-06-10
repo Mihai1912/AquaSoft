@@ -6,6 +6,7 @@ const hotelsRoutes = require('./routes/hotelsRoutes');
 const usersRoutes = require('./routes/usersRoutes');
 const citiesRoutes = require('./routes/citiesRoutes');
 const regionsRoutes = require('./routes/regionsRoutes');
+const reviewsRoutes = require('./routes/reviewsRoutes');
 
 app.use(express.json())
 
@@ -27,6 +28,7 @@ app.use('/hotels', hotelsRoutes);
 app.use('/user', usersRoutes);
 app.use('/cities', citiesRoutes);
 app.use('/regions', regionsRoutes);
+app.use('/reviews', reviewsRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

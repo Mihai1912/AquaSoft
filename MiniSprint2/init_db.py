@@ -56,13 +56,9 @@ CREATE TABLE IF NOT EXISTS users (
 );
 """
 
-def sql_escape_string(value):
-    return value.replace("'", "''") if value else "NULL"
-
 def sql_str(value):
     value = value.strip()
     return f"'{value.replace("'", "''")}'" if value else 'NULL'
-
 
 def sql_num(value):
     return value.strip() if value.strip() != '' else 'NULL'

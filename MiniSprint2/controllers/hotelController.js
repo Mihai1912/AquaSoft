@@ -37,13 +37,13 @@ const createHotel = async (req, res) => {
 
         const city = await City.findByPk(cityid);
 
-        if (city) {
+        if (!city) {
             return res.status(409).json({ message: 'City does not exists'})
         }
 
         const region = await Region.findByPk(propertystateprovinceid);
 
-        if (region) {
+        if (!region) {
             return res.status(409).json({ message: 'Region does not exists'})
         }
 
@@ -120,13 +120,13 @@ const updateHotel = async (req, res) => {
 
         const city = await City.findByPk(cityid);
 
-        if (city) {
+        if (!city) {
             return res.status(409).json({ message: 'City does not exists'})
         }
 
         const region = await Region.findByPk(propertystateprovinceid);
 
-        if (region) {
+        if (!region) {
             return res.status(409).json({ message: 'Region does not exists'})
         }
 
