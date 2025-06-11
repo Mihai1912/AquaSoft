@@ -8,18 +8,22 @@ conn_params = {
     "password": "password"
 }
 
+drop_reviews_sql = """
+DROP TABLE IF EXISTS reviews CASCADE;
+DROP TABLE IF EXISTS review_ratings CASCADE;
+"""
+
 create_reviews_sql = """
 CREATE TABLE IF NOT EXISTS reviews (
-    ReviewId SERIAL PRIMARY KEY,
+    ReviewId int PRIMARY KEY,
     GlobalPropertyID int NOT NULL,
-    UserId int NOT NULL,
+    UserId varchar(255) NOT NULL,
     ReviewTitle varchar(255),
     ReviewText text,
     ReviewRating int CHECK (ReviewRating >= 1 AND ReviewRating <= 5),
     ReviewDate timestamp DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (GlobalPropertyID) REFERENCES hotels(GlobalPropertyID),
-    FOREIGN KEY (UserId) REFERENCES users(id)
+    FOREIGN KEY (GlobalPropertyID) REFERENCES hotels(GlobalPropertyID)
 );
 """
 
@@ -39,6 +43,8 @@ def initialize_db():
         conn = psycopg2.connect(**conn_params)
         cursor = conn.cursor()
         
+        cursor.execute(drop_reviews_sql)
+
         cursor.execute(create_reviews_sql)
         
         cursor.execute(create_review_ratings_sql)
