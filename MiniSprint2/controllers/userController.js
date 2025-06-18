@@ -19,7 +19,7 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign(
-        { id: user.id, email: user.email },
+        { id: user.id, email: user.email, role: user.role_id },
         'supersecret',
         { expiresIn: '1h' }
         );
@@ -68,7 +68,62 @@ const register = async (req, res) => {
     }
 };
 
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.findAll({
+            attributes: ['id', 'username', 'email', 'role_id']
+        });
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching users', error: err.message });
+    }
+};
+
+const deleteUser = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        await user.destroy();
+        res.json({ message: 'User deleted successfully' });
+
+    } catch (err) {
+        res.status(500).json({ message: 'Error deleting user', error: err.message });
+    }
+}
+
+const updateUser = async (req, res) => {
+    const { id } = req.params;
+    const { username, email, role_id } = req.body;
+
+    try {
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.username = username || user.username;
+        user.email = email || user.email;
+        user.role_id = role_id || user.role_id;
+
+        await user.save();
+        res.json({ message: 'User updated successfully', user });
+
+    } catch (err) {
+        res.status(500).json({ message: 'Error updating user', error: err.message });
+    }
+};
+
 module.exports = {
     login,
-    register
+    register,
+    getAllUsers,
+    deleteUser,
+    updateUser
 };

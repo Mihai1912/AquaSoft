@@ -12,7 +12,7 @@ const Review = sequelize.define('Review', {
         allowNull: false,
     },
     userid: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
     },
     reviewtitle: {

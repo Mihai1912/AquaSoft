@@ -17,13 +17,14 @@ create_reviews_sql = """
 CREATE TABLE IF NOT EXISTS reviews (
     ReviewId int PRIMARY KEY,
     GlobalPropertyID int NOT NULL,
-    UserId varchar(255) NOT NULL,
+    UserId UUID NOT NULL,
     ReviewTitle varchar(255),
     ReviewText text,
     ReviewRating int CHECK (ReviewRating >= 1 AND ReviewRating <= 5),
     ReviewDate timestamp DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (GlobalPropertyID) REFERENCES hotels(GlobalPropertyID)
+    FOREIGN KEY (GlobalPropertyID) REFERENCES hotels(GlobalPropertyID),
+    FOREIGN KEY (UserId) REFERENCES users(id)
 );
 """
 

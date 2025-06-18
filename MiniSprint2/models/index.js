@@ -4,6 +4,7 @@ const City = require('./city');
 const Region = require('./region');
 const Review = require('./review');
 const ReviewRating = require('./review_rating');
+const User = require('./user');
 
 // RELAȚII
 Hotel.belongsTo(City, { foreignKey: 'cityid' });
@@ -18,9 +19,15 @@ Review.hasMany(ReviewRating, { foreignKey: 'reviewid' });
 Review.belongsTo(Hotel, { foreignKey: 'globalpropertyid' });
 Hotel.hasMany(Review, { foreignKey: 'globalpropertyid' });
 
+Review.belongsTo(User, { foreignKey: 'id' });
+User.hasMany(Review, { foreignKey: 'id' });
+
 module.exports = {
   sequelize,
   Hotel,
   City,
-  Region
+  Region,
+  Review,
+  ReviewRating,
+  User
 };

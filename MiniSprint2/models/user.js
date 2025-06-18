@@ -3,9 +3,9 @@ const sequelize = require('./db');
 
 const User = sequelize.define('User', {
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
     },
     username: {
         type: DataTypes.STRING(50),
@@ -20,6 +20,11 @@ const User = sequelize.define('User', {
     password: {
         type: DataTypes.STRING(255),
         allowNull: false,
+    },
+    role_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 2, // Assuming 2 is the default role for Traveler
     }
 }, {
     tableName: 'users',

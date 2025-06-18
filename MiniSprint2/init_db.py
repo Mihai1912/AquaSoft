@@ -47,14 +47,27 @@ CREATE TABLE IF NOT EXISTS regions (
 );
 """
 
-create_users_sql = """
-CREATE TABLE IF NOT EXISTS users (
+
+create_users_role_sql = """
+CREATE TABLE IF NOT EXISTS users_role (
     id SERIAL PRIMARY KEY,
-    username varchar(50),
-    email varchar(50),
-    password varchar(255)
+    role varchar(50) NOT NULL
 );
 """
+
+create_users_sql = """
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    username varchar(50),
+    email varchar(50),
+    password varchar(255),
+    role_id int,
+
+    FOREIGN KEY (role_id) REFERENCES users_role(id)
+);
+"""
+
 
 def sql_str(value):
     value = value.strip()
@@ -162,20 +175,36 @@ def pars_csv():
             except Exception as e:
                 print(f"Error inserting data: {e}")
 
+drop_users_sql = """
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS users_role CASCADE;
+"""
+
+add_users_role_sql = """
+INSERT INTO users_role (role) VALUES
+('Hotel Manager'),
+('Traveler'),
+('Administrator'),
+('Data Operator');
+"""
+
 def initialize_db():
     try:
         with psycopg2.connect(**conn_params) as conn:
             with conn.cursor() as cursor:
-                cursor.execute(create_cities_sql)
-                cursor.execute(create_regions_sql)
-                cursor.execute(create_hotels_sql)
+                # cursor.execute(create_cities_sql)
+                # cursor.execute(create_regions_sql)
+                # cursor.execute(create_hotels_sql)
+                cursor.execute(drop_users_sql)
+                cursor.execute(create_users_role_sql)
+                cursor.execute(add_users_role_sql)
                 cursor.execute(create_users_sql)
                 conn.commit()
                 print("Database initialized successfully.")
     except Exception as e:
         print(f"Error: {e}")
 
-    insert_cities_sql, insert_regions_sql, insert_hotels_sql = pars_csv()
+    # insert_cities_sql, insert_regions_sql, insert_hotels_sql = pars_csv()
 
 if __name__ == "__main__":
     initialize_db()

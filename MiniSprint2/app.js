@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 3001;
 const { sequelize } = require('./models');
 const hotelsRoutes = require('./routes/hotelsRoutes');
 const usersRoutes = require('./routes/usersRoutes');
@@ -9,6 +9,12 @@ const regionsRoutes = require('./routes/regionsRoutes');
 const reviewsRoutes = require('./routes/reviewsRoutes');
 
 app.use(express.json())
+const cors = require('cors');
+app.use(cors({
+  origin: 'http://localhost:3000', // Adjust this to your frontend's URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true // Allow credentials if needed
+}));
 
 sequelize.sync({})
   .then(() => {
